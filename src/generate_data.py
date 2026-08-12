@@ -47,23 +47,19 @@ dsa_problems = np.round(
 exam_days_remaining = np.random.randint(
     1, 61, number_of_students
 )
-phone_penalty=phone_usage*0.5
-noise = np.random.normal(0, 6, number_of_students)
+final_score = (
+    0.30 * quiz_average +
+    0.25 * assignment_completion +
+    0.20 * study_hours * 10 +
+    0.15 * attendance +
+    0.10 * dsa_problems
+)
 
-base_score = (
-    0.20 * (study_hours / 8 * 100)
-    + 0.15 * attendance
-    + 0.25 * assignment_completion
-    + 0.30 * quiz_average
-    + 0.10 * (dsa_problems / 100 * 100)
-)
-final_score=(
-  base_score - phone_penalty + noise
-)
-final_score = np.round(
-    final_score.clip(0, 100),
-    0
-)
+final_score += np.random.normal(0, 7)
+
+final_score = np.clip(final_score, 0, 100)
+final_score = np.round(final_score).astype(int)
+
 df = pd.DataFrame({
     'student_id': student_ids,
     'study_hours': study_hours,

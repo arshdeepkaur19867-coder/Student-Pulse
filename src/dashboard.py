@@ -5,6 +5,92 @@ import plotly.express as px
 file = 'data/students_with_risk.csv'
 df = pd.read_csv(file)
 
+# ============================================================
+# DATA QUALITY
+# ============================================================
+
+st.header("🔍 Data Quality")
+
+total_students = len(df)
+total_columns = len(df.columns)
+
+missing_values = df.isnull().sum().sum()
+duplicate_rows = df.duplicated().sum()
+duplicate_ids = df["student_id"].duplicated().sum()
+
+invalid_attendance = (
+    (df["attendance"] < 0) |
+    (df["attendance"] > 100)
+).sum()
+
+invalid_quiz = (
+    (df["quiz_average"] < 0) |
+    (df["quiz_average"] > 100)
+).sum()
+
+invalid_assignment = (
+    (df["assignment_completion"] < 0) |
+    (df["assignment_completion"] > 100)
+).sum()
+
+invalid_final_score = (
+    (df["final_score"] < 0) |
+    (df["final_score"] > 100)
+).sum()
+
+total_cells = df.shape[0] * df.shape[1]
+missing_cells = df.isnull().sum().sum()
+
+completeness = (
+    (total_cells - missing_cells) /
+    total_cells
+) * 100
+
+
+# Display metrics
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric("Students", total_students)
+
+with col2:
+    st.metric("Missing Values", missing_values)
+
+with col3:
+    st.metric("Duplicate IDs", duplicate_ids)
+
+with col4:
+    st.metric("Completeness", f"{completeness:.1f}%")
+
+
+st.subheader("Validation Checks")
+
+quality_data = pd.DataFrame({
+    "Check": [
+        "Missing values",
+        "Duplicate rows",
+        "Duplicate student IDs",
+        "Invalid attendance",
+        "Invalid quiz scores",
+        "Invalid assignments",
+        "Invalid final scores"
+    ],
+    "Count": [
+        missing_values,
+        duplicate_rows,
+        duplicate_ids,
+        invalid_attendance,
+        invalid_quiz,
+        invalid_assignment,
+        invalid_final_score
+    ]
+})
+
+st.dataframe(
+    quality_data,
+    use_container_width=True
+)
+
 # Page configuration
 st.set_page_config(
     page_title="Student Pulse",
