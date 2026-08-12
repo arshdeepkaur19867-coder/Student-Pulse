@@ -58,7 +58,11 @@ The system uses these factors to analyze academic performance and identify stude
 
 \- 🧪 Testing support
 
+## 📸 Dashboard Preview
 
+The Student-Pulse dashboard provides an interactive view of student performance, academic indicators, and risk-related insights.
+
+![Student-Pulse Dashboard](screenshots/dashboard.png)
 
 \## 🛠️ Technologies Used
 
