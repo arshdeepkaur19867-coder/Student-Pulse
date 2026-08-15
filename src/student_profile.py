@@ -3,8 +3,7 @@ import pandas as pd
 file = 'data/students_with_risk.csv'
 df = pd.read_csv(file)
 
-print(df['student_id'].head(10))
-print(df['student_id'].dtype)
+
 
 def show_student_profile(student_id):
 
@@ -29,36 +28,41 @@ def show_student_profile(student_id):
     print("DSA Problems:", student['dsa_problems'])
     print("Exam Days Remaining:", student['exam_days_remaining'])
     print("Final Score:", student['final_score'])
-    print("Risk Score:", risk_score, "/ 4")
+    print("Risk Score:", risk_score, "/ 8")
     print("Risk Level:", risk_level)
 
     print("\nAreas needing attention:")
+    has_issues=False
 
-    if student['attendance'] < 75:
-        print("- Attendance")
+    if student["quiz_average"] < 70:
+      print("- Quiz performance")
+      has_issues = True
 
-    if student['study_hours'] < 2:
-        print("- Study hours")
+    if student["assignment_completion"] < 70:
+     print("- Assignment completion")
+     has_issues = True
 
-    if student['assignment_completion'] < 70:
-        print("- Assignment completion")
+    if student["study_hours"] < 2:
+     print("- Study hours")
+     has_issues = True
 
-    if student['quiz_average'] < 70:
-        print("- Quiz performance")
-
+    if student["attendance"] < 75:
+      print("- Attendance")
+      has_issues = True
+    if not has_issues:
+        print("- No major areas of concern, keep up the good work!")
     print("\nRecommendations:")
+    if not has_issues:
+        print("- Maintain your current study habits and continue to perform well.")
+    if student["quiz_average"] < 70:
+       print("- Spend more time preparing for quizzes and revise weak topics.")
 
-    if student['attendance'] < 75:
-        print("- Try to improve your attendance above 75%.")
+    if student["assignment_completion"] < 70:
+       print("- Complete more assignments and submit them on time.")
 
-    if student['study_hours'] < 2:
-        print("- Increase your daily study time gradually.")
+    if student["study_hours"] < 2:
+      print("- Increase your daily study time gradually.")
 
-    if student['assignment_completion'] < 70:
-        print("- Complete more assignments and submit them on time.")
-
-    if student['quiz_average'] < 70:
-        print("- Spend more time preparing for quizzes and revise weak topics.")
-
-
+    if student["attendance"] < 75:
+      print("- Try to improve your attendance above 75%.")
 show_student_profile("S0001")

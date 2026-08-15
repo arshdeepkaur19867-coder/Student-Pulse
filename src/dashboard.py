@@ -6,6 +6,126 @@ file = 'data/students_with_risk.csv'
 df = pd.read_csv(file)
 
 # ============================================================
+# TITLE
+# ============================================================
+
+st.title("🎓 Student Pulse")
+st.subheader("Student Academic Risk Monitoring")
+
+# ============================================================
+# STUDENT SELECTION
+# ============================================================
+
+student_id = st.selectbox(
+    "Select Student",
+    df["student_id"].tolist()
+)
+student = df[df["student_id"] == student_id].iloc[0]
+
+
+
+# ============================================================
+# STUDENT PROFILE
+# ============================================================
+
+st.header("Student Profile")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric("Study Hours", student["study_hours"])
+    st.metric("Attendance", f"{student['attendance']:.0f}%")
+    st.metric("Quiz Average", student["quiz_average"])
+
+with col2:
+    st.metric(
+        "Assignment Completion",
+        f"{student['assignment_completion']:.0f}%"
+    )
+    st.metric("Phone Usage", student["phone_usage"])
+    st.metric("Sleep Hours", student["sleep_hours"])
+
+with col3:
+    st.metric("DSA Problems", int(student["dsa_problems"]))
+    st.metric("Final Score", int(student["final_score"]))
+    st.metric(
+        "Exam Days Remaining",
+        int(student["exam_days_remaining"])
+    )
+
+# ============================================================
+# RISK ASSESSMENT
+# ============================================================
+
+st.header(" ⚠️ Risk Assessment")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric(
+        "Risk Score",
+        f"{int(student['risk_score'])} / 8"
+    )
+
+with col2:
+    st.metric(
+        "Risk Level",
+        student["risk_level"]
+    )
+
+# ============================================================
+# AREAS NEEDING ATTENTION
+# ============================================================
+
+st.subheader("⚠️ Areas Needing Attention")
+
+issues = []
+
+if student["quiz_average"] < 70:
+    issues.append("Quiz performance")
+
+if student["assignment_completion"] < 70:
+    issues.append("Assignment completion")
+
+if student["study_hours"] < 2:
+    issues.append("Study hours")
+
+if student["attendance"] < 75:
+    issues.append("Attendance")
+
+if issues:
+    for issue in issues:
+        st.warning(issue)
+else:
+    st.success("No major areas needing attention.")
+
+# ============================================================
+# RECOMMENDATIONS
+# ============================================================
+
+st.subheader("💡 Recommendations")
+
+if student["quiz_average"] < 70:
+    st.info(
+        "Spend more time preparing for quizzes "
+        "and revise weak topics."
+    )
+
+if student["assignment_completion"] < 70:
+    st.info(
+        "Complete more assignments and submit them on time."
+    )
+
+if student["study_hours"] < 2:
+    st.info(
+        "Increase your daily study time gradually."
+    )
+
+if student["attendance"] < 75:
+    st.info(
+        "Try to improve your attendance above 75%."
+    )
+# ============================================================
 # DATA QUALITY
 # ============================================================
 
